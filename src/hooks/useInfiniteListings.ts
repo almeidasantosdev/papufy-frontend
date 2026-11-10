@@ -14,6 +14,8 @@ export interface ListingsQuery {
   cidade?: string;
   minPrice?: number;
   maxPrice?: number;
+  /** Só publicações marcadas como Urgente (SOS). */
+  urgente?: boolean;
 }
 
 export function useInfiniteListings(

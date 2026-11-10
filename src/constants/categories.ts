@@ -55,20 +55,20 @@ export const CATEGORY_META: Record<
     imageGradient: "from-sky-500 to-sky-700",
   },
   "Reformas e Reparos": {
-    icon: "🏗️",
-    iconKey: "hardhat",
+    icon: "🔨",
+    iconKey: "reformas",
     color: "bg-amber-100 text-amber-800",
     imageGradient: "from-amber-500 to-orange-600",
   },
   "Serviços Domésticos": {
-    icon: "🧹",
-    iconKey: "brush",
+    icon: "🪪",
+    iconKey: "servicos",
     color: "bg-emerald-100 text-emerald-800",
     imageGradient: "from-emerald-500 to-teal-600",
   },
   "Design e Tecnologia": {
-    icon: "💻",
-    iconKey: "monitor",
+    icon: "🪶",
+    iconKey: "design",
     color: "bg-sky-100 text-sky-800",
     imageGradient: "from-sky-400 to-blue-600",
   },
@@ -79,8 +79,8 @@ export const CATEGORY_META: Record<
     imageGradient: "from-indigo-500 to-blue-700",
   },
   Eventos: {
-    icon: "🎉",
-    iconKey: "party",
+    icon: "🎟️",
+    iconKey: "eventos",
     color: "bg-pink-100 text-pink-800",
     imageGradient: "from-pink-500 to-rose-600",
   },
@@ -193,32 +193,38 @@ export const MACRO_SCROLL_CATEGORIES = [
     iconKey: "todos" as CategoryIconKey,
     listingType: null as ListingTypeFilter,
     category: null as string | null,
-  },
-  {
-    id: "assistencia",
-    label: "Assistência",
-    icon: "🔧",
-    iconKey: "headset" as CategoryIconKey,
-    listingType: null as ListingTypeFilter,
-    category: "Assistência Técnica",
+    sosOnly: false as boolean,
   },
   {
     id: "reformas",
     label: "Reformas",
-    icon: "🏗️",
-    iconKey: "hardhat" as CategoryIconKey,
+    icon: "🔨",
+    iconKey: "reformas" as CategoryIconKey,
     listingType: null as ListingTypeFilter,
     category: "Reformas e Reparos",
+    sosOnly: false as boolean,
   },
   {
     id: "servicos",
     label: "Serviços",
-    icon: "🧹",
-    iconKey: "brush" as CategoryIconKey,
+    icon: "🪪",
+    iconKey: "servicos" as CategoryIconKey,
     listingType: null as ListingTypeFilter,
     category: "Serviços Domésticos",
+    sosOnly: false as boolean,
   },
 ] as const;
+
+/** Filtro SOS — publicações marcadas como Urgente. */
+export const HOME_SOS_FILTER = {
+  id: "sos",
+  label: "SOS",
+  icon: "🆘",
+  iconKey: null,
+  listingType: null as ListingTypeFilter,
+  category: null as string | null,
+  sosOnly: true as boolean,
+} as const;
 
 /** Só "Todos" — Pedidos/Profissionais não têm chip; misturam nas categorias. */
 export const HOME_TYPE_FILTERS = MACRO_SCROLL_CATEGORIES.filter(
@@ -255,37 +261,32 @@ export function resolveListingCategories(
 /** Categorias de serviço (mobile + desktop) — mesmas nos dois. */
 export const HOME_SERVICE_FILTERS = [
   ...MACRO_SCROLL_CATEGORIES.filter(
-    (m) => m.id === "assistencia" || m.id === "reformas" || m.id === "servicos"
+    (m) => m.id === "reformas" || m.id === "servicos"
   ),
   {
     id: "design",
     label: "Design",
-    icon: "💻",
-    iconKey: "monitor" as CategoryIconKey,
+    icon: "🪶",
+    iconKey: "design" as CategoryIconKey,
     listingType: null as ListingTypeFilter,
     category: "Design e Tecnologia" as string | null,
-  },
-  {
-    id: "aulas",
-    label: "Aulas",
-    icon: "📚",
-    iconKey: "book" as CategoryIconKey,
-    listingType: null as ListingTypeFilter,
-    category: "Aulas e Consultoria" as string | null,
+    sosOnly: false as boolean,
   },
   {
     id: "eventos",
     label: "Eventos",
-    icon: "🎉",
-    iconKey: "party" as CategoryIconKey,
+    icon: "🎟️",
+    iconKey: "eventos" as CategoryIconKey,
     listingType: null as ListingTypeFilter,
     category: "Eventos" as string | null,
+    sosOnly: false as boolean,
   },
 ] as const;
 
-/** Todos + categorias (sem chips de tipo Pedidos/Profissionais). */
+/** Todos + SOS + categorias (sem Assistência/Aulas). */
 export const HOME_ALL_FILTERS = [
   ...HOME_TYPE_FILTERS,
+  HOME_SOS_FILTER,
   ...HOME_SERVICE_FILTERS,
 ] as const;
 

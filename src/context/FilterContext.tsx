@@ -18,6 +18,8 @@ export interface JobFilters {
   search: string;
   category: string | null;
   listingType: ListingTypeFilter;
+  /** Filtro SOS — só publicações marcadas como Urgente. */
+  sosOnly: boolean;
   minPrice: number | null;
   maxPrice: number | null;
   cidade: string;
@@ -32,6 +34,7 @@ interface FilterContextValue {
   setSearch: (search: string) => void;
   setCategory: (category: string | null) => void;
   setListingType: (listingType: ListingTypeFilter) => void;
+  setSosOnly: (sosOnly: boolean) => void;
   setPriceRange: (min: number | null, max: number | null) => void;
   setLocation: (cidade: string, uf: string) => void;
   applySearch: (search: string) => void;
@@ -45,6 +48,7 @@ const DEFAULT_FILTERS: JobFilters = {
   search: "",
   category: null,
   listingType: null,
+  sosOnly: false,
   minPrice: null,
   maxPrice: null,
   cidade: "Campina Grande",
@@ -56,11 +60,18 @@ function loadFilters(): JobFilters {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw) as Partial<JobFilters> & { tipo?: string };
+      const category =
+        parsed.category === "Assistência Técnica" ||
+        parsed.category === "Aulas e Consultoria"
+          ? null
+          : (parsed.category ?? null);
       return {
         ...DEFAULT_FILTERS,
         ...parsed,
+        category,
         // Pedidos/Profissionais não têm filtro de tipo; misturam nas categorias.
         listingType: null,
+        sosOnly: Boolean(parsed.sosOnly),
       };
     }
   } catch {
@@ -120,6 +131,7 @@ export function FilterProvider({ children }: { children: ReactNode }) {
         uf: filters.uf,
         category: filters.category,
         listingType: filters.listingType,
+        sosOnly: filters.sosOnly,
         minPrice: filters.minPrice,
         maxPrice: filters.maxPrice,
       })
@@ -129,6 +141,7 @@ export function FilterProvider({ children }: { children: ReactNode }) {
     filters.uf,
     filters.category,
     filters.listingType,
+    filters.sosOnly,
     filters.minPrice,
     filters.maxPrice,
   ]);
@@ -144,11 +157,20 @@ export function FilterProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const setCategory = useCallback((category: string | null) => {
-    setFilters((prev) => ({ ...prev, category }));
+    setFilters((prev) => ({ ...prev, category, sosOnly: false }));
   }, []);
 
   const setListingType = useCallback((listingType: ListingTypeFilter) => {
     setFilters((prev) => ({ ...prev, listingType }));
+  }, []);
+
+  const setSosOnly = useCallback((sosOnly: boolean) => {
+    setFilters((prev) => ({
+      ...prev,
+      sosOnly,
+      category: sosOnly ? null : prev.category,
+      listingType: null,
+    }));
   }, []);
 
   const setPriceRange = useCallback(
@@ -159,7 +181,7 @@ export function FilterProvider({ children }: { children: ReactNode }) {
   );
 
   const clearCategory = useCallback(() => {
-    setFilters((prev) => ({ ...prev, category: null }));
+    setFilters((prev) => ({ ...prev, category: null, sosOnly: false }));
   }, []);
 
   const resetFilters = useCallback(() => {
@@ -190,6 +212,7 @@ export function FilterProvider({ children }: { children: ReactNode }) {
       setSearch,
       setCategory,
       setListingType,
+      setSosOnly,
       setPriceRange,
       setLocation,
       applySearch,
@@ -203,6 +226,7 @@ export function FilterProvider({ children }: { children: ReactNode }) {
       setSearch,
       setCategory,
       setListingType,
+      setSosOnly,
       setPriceRange,
       setLocation,
       applySearch,

@@ -28,15 +28,20 @@ export function AppPageHome() {
     () => ({
       search: debouncedSearch || undefined,
       // Pedidos + profissionais afins na mesma lista (sem filtrar por tipo).
-      categories: resolveListingCategories(filters.category),
+      // SOS ignora categoria e lista só urgentes.
+      categories: filters.sosOnly
+        ? undefined
+        : resolveListingCategories(filters.category),
       uf: filters.uf,
       cidade: filters.cidade,
       minPrice: filters.minPrice ?? undefined,
       maxPrice: filters.maxPrice ?? undefined,
+      urgente: filters.sosOnly ? true : undefined,
     }),
     [
       debouncedSearch,
       filters.category,
+      filters.sosOnly,
       filters.uf,
       filters.cidade,
       filters.minPrice,
@@ -47,14 +52,18 @@ export function AppPageHome() {
   const professionalsQuery = useMemo(
     () => ({
       search: debouncedSearch || undefined,
-      categories: resolveListingCategories(filters.category),
+      categories: filters.sosOnly
+        ? undefined
+        : resolveListingCategories(filters.category),
       listingType: "PROFESSIONAL_PROFILE" as const,
       uf: filters.uf,
       cidade: filters.cidade,
+      urgente: filters.sosOnly ? true : undefined,
     }),
     [
       debouncedSearch,
       filters.category,
+      filters.sosOnly,
       filters.uf,
       filters.cidade,
     ]
@@ -107,12 +116,18 @@ export function AppPageHome() {
   const moreListings = listings.slice(FEATURED_COUNT);
   const searchTerm = debouncedSearch.trim();
   const hasSearch = searchTerm.length > 0;
-  const featuredTitle = hasSearch ? "Resultados da busca" : "Serviços em Destaque";
+  const featuredTitle = hasSearch
+    ? "Resultados da busca"
+    : filters.sosOnly
+      ? "SOS — Pedidos urgentes"
+      : "Serviços em Destaque";
   const featuredSubtitle = hasSearch
     ? locationDetecting
       ? "Detectando sua localização..."
       : `"${searchTerm}" em ${locationLabel}`
-    : null;
+    : filters.sosOnly
+      ? `Urgentes em ${locationLabel}`
+      : null;
   const regionSubtitle = locationDetecting
     ? "Detectando sua localização..."
     : hasSearch
@@ -149,11 +164,13 @@ export function AppPageHome() {
           subtitle={featuredSubtitle}
         />
 
-        <FeaturedProfessionalsScroll
-          listings={featuredProfessionals}
-          loading={professionalsLoading}
-          locationLabel={locationLabel}
-        />
+        {!filters.sosOnly && (
+          <FeaturedProfessionalsScroll
+            listings={featuredProfessionals}
+            loading={professionalsLoading}
+            locationLabel={locationLabel}
+          />
+        )}
 
         {showMoreSection && (
           <MotionEnter delay={80}>

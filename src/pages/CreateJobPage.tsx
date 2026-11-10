@@ -32,6 +32,7 @@ export function CreateJobPage() {
   );
   const [descricao, setDescricao] = useState("");
   const [semQualificacao, setSemQualificacao] = useState(false);
+  const [urgente, setUrgente] = useState(false);
   const [cep, setCep] = useState("");
   const [rua, setRua] = useState("");
   const [cidade, setCidade] = useState(user?.cidade || "Campina Grande");
@@ -232,6 +233,10 @@ export function CreateJobPage() {
       }
 
       formData.append("semQualificacao", String(semQualificacao));
+      formData.append(
+        "urgente",
+        String(listingType === "JOB_VACANCY" ? urgente : false)
+      );
 
       imagens.forEach((img) => formData.append("imagens", img));
 
@@ -450,6 +455,29 @@ export function CreateJobPage() {
                   </span>
                 </span>
               </label>
+
+              {listingType === "JOB_VACANCY" && (
+                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-rose-200 bg-gradient-to-r from-rose-50 to-orange-50 px-4 py-3 shadow-[0_0_0_1px_rgba(244,63,94,0.08)]">
+                  <input
+                    type="checkbox"
+                    checked={urgente}
+                    onChange={(e) => setUrgente(e.target.checked)}
+                    className="mt-0.5 h-5 w-5 rounded border-rose-300 text-rose-600 focus:ring-rose-400"
+                  />
+                  <span>
+                    <span className="flex items-center gap-2 text-sm font-bold text-rose-800">
+                      Urgente (SOS)
+                      <span className="rounded-md bg-rose-600 px-1.5 py-0.5 text-[10px] font-black tracking-wide text-white">
+                        SOS
+                      </span>
+                    </span>
+                    <span className="mt-0.5 block text-xs text-rose-700/80">
+                      Destaque seu pedido no filtro SOS da home para quem pode
+                      atender agora.
+                    </span>
+                  </span>
+                </label>
+              )}
 
               <div className="border-t border-papufy-border pt-4">
                 <h3 className="text-sm font-semibold text-papufy-text">
