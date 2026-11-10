@@ -135,25 +135,26 @@ export function CategoryBar({ onCategorySelect }: CategoryBarProps) {
     <section className="border-y border-slate-200/80 bg-white" aria-label="Categorias">
       <div className="page-container py-3 lg:py-4">
         <div className="scrollbar-hide flex flex-wrap items-start justify-center gap-5 pb-0.5 sm:gap-7">
-          {HOME_ALL_FILTERS.map((item) =>
-            item.id === "sos" ? (
-              <SosFilterChip
-                key={item.id}
-                isActive={activeId === "sos"}
-                onSelect={handleSos}
-              />
-            ) : (
+          {HOME_ALL_FILTERS.map((item) => {
+            if (item.id === "sos") {
+              return (
+                <SosFilterChip
+                  key={item.id}
+                  isActive={activeId === "sos"}
+                  onSelect={handleSos}
+                />
+              );
+            }
+            return (
               <FilterChip
                 key={item.id}
                 label={item.label}
-                iconName={resolveSoftCategoryIcon(
-                  typeof item.iconKey === "string" ? item.iconKey : item.id
-                )}
+                iconName={resolveSoftCategoryIcon(item.iconKey)}
                 isActive={activeId === item.id}
                 onSelect={() => handleSelect(item.listingType, item.category)}
               />
-            )
-          )}
+            );
+          })}
         </div>
       </div>
     </section>

@@ -135,25 +135,26 @@ export function CategoryScroll({ onChange }: CategoryScrollProps) {
     <section aria-label="Categorias" className="border-y border-slate-200/80 bg-white">
       <div className="py-2.5 sm:py-3">
         <div className="scrollbar-hide flex w-full snap-x snap-mandatory items-start justify-start gap-1 overflow-x-auto overscroll-x-contain px-3 sm:gap-2 sm:px-4 [-webkit-overflow-scrolling:touch]">
-          {HOME_ALL_FILTERS.map((item) =>
-            item.id === "sos" ? (
-              <SosChip
-                key={item.id}
-                isActive={activeId === "sos"}
-                onSelect={applySos}
-              />
-            ) : (
+          {HOME_ALL_FILTERS.map((item) => {
+            if (item.id === "sos") {
+              return (
+                <SosChip
+                  key={item.id}
+                  isActive={activeId === "sos"}
+                  onSelect={applySos}
+                />
+              );
+            }
+            return (
               <MacroChip
                 key={item.id}
                 label={item.label}
-                iconName={resolveSoftCategoryIcon(
-                  typeof item.iconKey === "string" ? item.iconKey : item.id
-                )}
+                iconName={resolveSoftCategoryIcon(item.iconKey)}
                 isActive={activeId === item.id}
                 onSelect={() => applyCategory(item.listingType, item.category)}
               />
-            )
-          )}
+            );
+          })}
         </div>
       </div>
     </section>
