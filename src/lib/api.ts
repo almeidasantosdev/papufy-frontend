@@ -216,6 +216,7 @@ export const api = {
       cidade?: string;
       minPrice?: number;
       maxPrice?: number;
+      urgente?: boolean;
       limit?: number;
       offset?: number;
     }) => {
@@ -237,6 +238,7 @@ export const api = {
         query.set("minPrice", String(params.minPrice));
       if (params?.maxPrice != null)
         query.set("maxPrice", String(params.maxPrice));
+      if (params?.urgente === true) query.set("urgente", "true");
       if (params?.limit != null) query.set("limit", String(params.limit));
       if (params?.offset != null) query.set("offset", String(params.offset));
       const qs = query.toString();
@@ -280,6 +282,7 @@ export const api = {
         uf?: string;
         telefone?: string;
         semQualificacao?: boolean;
+        urgente?: boolean;
       }
     ) =>
       request<{ listing: Listing }>(`/listings/${id}`, {

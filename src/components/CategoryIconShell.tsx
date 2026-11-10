@@ -36,7 +36,7 @@ export function CategoryIconShell({
             }
           : {
               scale: 1,
-              backgroundColor: "rgba(186, 230, 253, 0)",
+              backgroundColor: "rgba(224, 242, 254, 0.55)",
               boxShadow:
                 "0 0 0 0px rgba(56, 189, 248, 0), 0 0 0 0px rgba(56, 189, 248, 0), 0 0 0 rgba(14, 165, 233, 0)",
             }

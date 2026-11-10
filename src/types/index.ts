@@ -60,6 +60,8 @@ export interface Listing {
   aCombinar: boolean;
   categoria: string;
   semQualificacao?: boolean;
+  /** Pedido urgente — aparece no filtro SOS. */
+  urgente?: boolean;
   status: ListingStatus;
   cep?: string | null;
   cidade: string;

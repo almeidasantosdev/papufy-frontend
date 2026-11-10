@@ -47,6 +47,7 @@ export function ListingDetailPage() {
   const [editUf, setEditUf] = useState("PB");
   const [editTelefone, setEditTelefone] = useState("");
   const [editSemQualificacao, setEditSemQualificacao] = useState(false);
+  const [editUrgente, setEditUrgente] = useState(false);
   const { playToken: chatPlay, trigger: triggerChat } = useLordPlay();
 
   const loadListing = async (listingId: string) => {
@@ -74,6 +75,7 @@ export function ListingDetailPage() {
     setEditUf(item.uf);
     setEditTelefone(item.telefone ?? "");
     setEditSemQualificacao(item.semQualificacao ?? false);
+    setEditUrgente(item.urgente ?? false);
     setEditError(null);
     setEditing(true);
   };
@@ -132,6 +134,7 @@ export function ListingDetailPage() {
         uf: editUf,
         telefone: digitsOnly(editTelefone),
         semQualificacao: editSemQualificacao,
+        urgente: editUrgente,
       });
       setListing(updated);
       setEditing(false);
@@ -276,6 +279,11 @@ export function ListingDetailPage() {
                 {typeBadge}
               </span>
               <StatusBadge status={listing.status} />
+              {listing.urgente && (
+                <span className="inline-flex items-center gap-1 rounded-lg bg-rose-600 px-2.5 py-1 text-[10px] font-black uppercase tracking-wide text-white shadow-sm">
+                  SOS · Urgente
+                </span>
+              )}
               {listing.semQualificacao && (
                 <span className="inline-block rounded-lg bg-sky-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-sky-800">
                   Sem qualificação exigida
@@ -374,6 +382,20 @@ export function ListingDetailPage() {
                     Não é necessária qualificação para este serviço
                   </span>
                 </label>
+
+                {listing.listingType === "JOB_VACANCY" && (
+                  <label className="flex items-start gap-3 rounded-xl border border-rose-200 bg-gradient-to-r from-rose-50 to-orange-50 px-4 py-3">
+                    <input
+                      type="checkbox"
+                      checked={editUrgente}
+                      onChange={(e) => setEditUrgente(e.target.checked)}
+                      className="mt-0.5 h-5 w-5 rounded border-rose-300 text-rose-600"
+                    />
+                    <span className="text-sm font-semibold text-rose-800">
+                      Urgente (SOS) — aparece no filtro SOS da home
+                    </span>
+                  </label>
+                )}
 
                 {editError && (
                   <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">

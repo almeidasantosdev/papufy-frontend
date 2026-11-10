@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { JOB_VACANCY_CATEGORIES } from "../../constants/categories";
+
+const FILTER_SHEET_CATEGORIES = JOB_VACANCY_CATEGORIES.filter(
+  (c) => c !== "Assistência Técnica" && c !== "Aulas e Consultoria"
+);
 import { useFilters } from "../../context/FilterContext";
 import { MotionSheetPanel } from "../motion/MotionPrimitives";
 
@@ -134,7 +138,7 @@ export function FilterBottomSheet({
                   >
                     Todas
                   </button>
-                  {JOB_VACANCY_CATEGORIES.map((c) => (
+                  {FILTER_SHEET_CATEGORIES.map((c) => (
                     <button
                       key={c}
                       type="button"

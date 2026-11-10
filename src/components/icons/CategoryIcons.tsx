@@ -41,6 +41,11 @@ export type CategoryIconKey =
   | "plant"
   | "box"
   | "pin"
+  /** Soft-filled home filter keys */
+  | "reformas"
+  | "servicos"
+  | "design"
+  | "eventos"
   /** @deprecated aliases mantidos para metas antigas */
   | "sparkles"
   | "briefcase"
@@ -73,6 +78,10 @@ const CATEGORY_ICON_MAP: Record<CategoryIconKey, LucideIcon> = {
   box: Box,
   bag: Package,
   pin: MapPin,
+  reformas: HardHat,
+  servicos: ClipboardList,
+  design: Monitor,
+  eventos: PartyPopper,
 };
 
 export function CategoryIcon({
@@ -86,7 +95,9 @@ export function CategoryIcon({
   return (
     <Icon
       className={className}
-      strokeWidth={1.75}
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
       aria-hidden
     />
   );

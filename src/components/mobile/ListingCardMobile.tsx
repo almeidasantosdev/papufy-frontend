@@ -122,6 +122,16 @@ export function ListingCardMobile({
             />
           </MotionPressButton>
 
+          {listing.urgente && (
+            <Badge
+              className={`absolute left-1.5 top-1.5 rounded-md border-0 bg-rose-600 font-black uppercase tracking-wide text-white shadow-md hover:bg-rose-600 ${
+                compact ? "px-1 py-0.5 text-[7px]" : "left-2 top-2 px-1.5 py-0.5 text-[9px]"
+              }`}
+            >
+              SOS
+            </Badge>
+          )}
+
           <Badge
             className={`absolute max-w-[calc(100%-2.5rem)] rounded-md font-bold uppercase leading-tight tracking-wide shadow-sm ${
               compact

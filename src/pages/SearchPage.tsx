@@ -18,15 +18,19 @@ export function SearchPage() {
   const query = useMemo(
     () => ({
       search: debouncedSearch || undefined,
-      categories: resolveListingCategories(filters.category),
+      categories: filters.sosOnly
+        ? undefined
+        : resolveListingCategories(filters.category),
       uf: filters.uf,
       cidade: filters.cidade,
       minPrice: filters.minPrice ?? undefined,
       maxPrice: filters.maxPrice ?? undefined,
+      urgente: filters.sosOnly ? true : undefined,
     }),
     [
       debouncedSearch,
       filters.category,
+      filters.sosOnly,
       filters.cidade,
       filters.uf,
       filters.minPrice,
