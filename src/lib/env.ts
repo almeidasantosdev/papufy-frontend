@@ -17,6 +17,7 @@ function assertProductionApiUrl(url: string): string {
 export function getApiBaseUrl(): string {
   const url = trimUrl(import.meta.env.VITE_API_URL);
   if (!url) {
+    if (import.meta.env.DEV) return "";
     throw new Error(
       "VITE_API_URL não configurada. Defina a URL do backend Render na Vercel (Production + Preview)."
     );
